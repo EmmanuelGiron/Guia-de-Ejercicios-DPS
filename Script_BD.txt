@@ -1,0 +1,98 @@
+CREATE DATABASE torneo_dps CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+
+USE torneo_dps;
+
+CREATE TABLE Genero(
+    id INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    fechaFila TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT PK_Genero PRIMARY KEY (id)
+) ENGINE = INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+CREATE TABLE Ciclo(
+    id INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    fechaFila TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT PK_Ciclo PRIMARY KEY (id)
+) ENGINE = INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+CREATE TABLE Posicion(
+    id INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    fechaFila TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT PK_Posicion PRIMARY KEY (id)
+) ENGINE = INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+CREATE TABLE Facultad(
+    id INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    fechaFila TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT PK_Facultad PRIMARY KEY (id)
+) ENGINE = INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+CREATE TABLE Estado(
+    id INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    fechaFila TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT PK_Estado PRIMARY KEY (id)
+) ENGINE = INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+CREATE TABLE Equipo(
+    id INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    year INT NULL,
+    idCiclo INT NOT NULL,
+    idFacultad INT NOT NULL,
+    idGenero INT NOT NULL,
+    idEstado INT NOT NULL,
+    fechaFila TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT PK_Equipo PRIMARY KEY (id),
+    CONSTRAINT FK_Genero_Equipo FOREIGN KEY (idGenero) REFERENCES Genero(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FK_Facultad_Equipo FOREIGN KEY (idFacultad) REFERENCES Facultad(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FK_Ciclo_Equipo FOREIGN KEY (idCiclo) REFERENCES Ciclo(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FK_Estado_Equipo FOREIGN KEY (idEstado) REFERENCES Estado(id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+CREATE TABLE Jugador(
+    id INT NOT NULL AUTO_INCREMENT,
+    carnet VARCHAR(8) NOT NULL ,
+    nombres VARCHAR(100) NOT NULL,
+    apellidos VARCHAR(100) NOT NULL,
+    fechaNacimiento DATE NOT NULL,
+    numeroCamisa INT NOT NULL,
+    idGenero INT NOT NULL,
+    idPosicion INT NOT NULL,
+    idEquipo INT NOT NULL,
+    fechaFila TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT PK_Jugador PRIMARY KEY (id),
+    CONSTRAINT FK_Genero_Jugador FOREIGN KEY (idGenero) REFERENCES Genero(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FK_Posicion_Jugador FOREIGN KEY (idPosicion) REFERENCES Posicion(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FK_Equipo_Jugador FOREIGN KEY (idEquipo) REFERENCES Equipo(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT U_Carnet_Jugador UNIQUE (carnet),
+    CONSTRAINT U_NumeroCamisa_Jugador UNIQUE (idEquipo, numeroCamisa)
+) ENGINE = INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+INSERT INTO Ciclo (nombre)
+VALUES ('Ciclo 01'),
+       ('Ciclo 02');
+
+INSERT INTO Estado (nombre)
+VALUES ('Registrado'),
+       ('Inscrito');
+
+INSERT INTO Facultad (nombre)
+VALUES ('Facultad de Ingeniería'), 
+       ('Facultad de Ciencias y Humanidades'), 
+       ('Facultad de Ciencias Económicas'), 
+       ('Facultad de Ciencias de la Rehabilitación'), 
+       ('Facultad de Aeronáutica');
+
+INSERT INTO Genero (nombre)
+VALUES ('Masculino'),
+       ('Femenino');
+
+INSERT INTO Posicion (nombre)
+VALUES ('Portero'),
+       ('Mediocampista'),
+       ('Defensa'),
+       ('Delantero');

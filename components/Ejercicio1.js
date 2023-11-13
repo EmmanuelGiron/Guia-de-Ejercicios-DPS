@@ -5,8 +5,6 @@ import DatePicker from 'react-native-date-picker';
 import { useNavigation } from "@react-navigation/native";
 
 
-
-
 function Formulario() {
   //Hook para almacenar los empleados
   const [paciente, setPaciente] = useState([])
@@ -299,27 +297,14 @@ function Formulario() {
         <Text style={styles.label}>Fecha Nacimiento</Text>
         <View style={styles.fechaContenedor}>
           <Button title="Selccionar fecha" onPress={() => setOpen(true)} />
-          <DatePicker
-            modal
-            open={open}
-            mode='date'
-            date={fechaNacimiento}
-            onConfirm={(date) => {
-              setOpen(false)
-              setFechaNacimiento(date)
-              handleEdad(date)
-            }}
-            onCancel={() => {
-              setOpen(false)
-            }}
-          />
+          <DatePicker date={fechaNacimiento} onDateChange={setFechaNacimiento} mode="date"/>
         </View>
 
 
       </View>
 
       <View style={styles.campo}>
-        <Text style={styles.label}>Telélfo Móvil</Text>
+        <Text style={styles.label}>Telélofo Móvil</Text>
         <TextInput style={styles.input} placeholder='Móvil Paciente'
           value={numeroTelefonoMovil}
           onChangeText={setNumeroTelefonoMovil}

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, TextInput, StyleSheet, Pressable, Alert, Image } from 'react-native';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import SvgUri from 'react-native-svg-uri';
 import { useNavigation } from "@react-navigation/native";
 
 function Ejercicio2() {
@@ -52,18 +50,21 @@ function Ejercicio2() {
 
     const ObtenerDatosDeIP = async (ip) => {
         try {
-            console.log(ip)
-            const response = await axios.get(`http://ipwho.is/${ip}`);
-            AsyncStorage.setItem('tipoip', response.data.type);
-            AsyncStorage.setItem('continenteIP', response.data.continent);
-            AsyncStorage.setItem('paisIP', response.data.country);
-            AsyncStorage.setItem('capitalIP', response.data.capital);
-            AsyncStorage.setItem('codigoPaisIP', response.data.country_code);
-            AsyncStorage.setItem('imagenIP', response.data.flag.img);
-            AsyncStorage.setItem('horaIP', response.data.timezone.current_time);
-            AsyncStorage.setItem('orgIP', response.data.connection.org);
-            AsyncStorage.setItem('ispIP', response.data.connection.isp);
-            AsyncStorage.setItem('domainIP', response.data.connection.domain);
+          await fetch('https://ipwho.is/'+ip, {
+          method: 'GET'
+          })
+          .then(async (res) => {
+            const data = await res.json();
+            AsyncStorage.setItem('tipoip', data.type);
+            AsyncStorage.setItem('continenteIP', data.continent);
+            AsyncStorage.setItem('paisIP', data.country);
+            AsyncStorage.setItem('capitalIP', data.capital);
+            AsyncStorage.setItem('codigoPaisIP', data.country_code);
+            AsyncStorage.setItem('imagenIP', data.flag.img);
+            AsyncStorage.setItem('horaIP', data.timezone.current_time);
+            AsyncStorage.setItem('orgIP', data.connection.org);
+            AsyncStorage.setItem('ispIP', data.connection.isp);
+            AsyncStorage.setItem('domainIP', data.connection.domain);
             const tipoIp = await AsyncStorage.getItem('tipoip');
             const continente = await AsyncStorage.getItem('continenteIP');
             const pais = await AsyncStorage.getItem('paisIP');
@@ -85,6 +86,7 @@ function Ejercicio2() {
             setIsp(isp)
             setDomain(domain)
             setDatos('')
+          })       
         } catch (error) {
             console.error('Error:', error);
         }

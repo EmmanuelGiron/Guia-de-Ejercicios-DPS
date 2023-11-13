@@ -1,7 +1,7 @@
 import { Picker } from '@react-native-picker/picker';
 import React, { useState, useEffect } from 'react'
 import { Text, StyleSheet, View, TextInput, Pressable, Modal, Alert, FlatList, ScrollView, Image, Button } from 'react-native'
-import DatePicker from 'react-native-date-picker';
+//import DatePicker from 'react-native-date-picker';
 import { useNavigation } from "@react-navigation/native";
 
 
